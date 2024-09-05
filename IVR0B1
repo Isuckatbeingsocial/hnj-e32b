@@ -1,0 +1,60 @@
+(function ivR0B1() {
+    // init version recode 0 build 1
+    let n = '#app';
+    let a = document.querySelector(n);
+    let j = Object.keys(a).find(key => key.startsWith('__reactContainere'));
+    let rd = j.split('__reactContainere')[1];
+    let r = a[j];
+    
+    window.getApp = () => a;
+    
+    const c = r?.child?.stateNode;
+    if (!c) {
+        console.error('Could not find the component instance.');
+        return;
+    }
+    
+    let o = (prop, s, l) => {
+        v()[prop] = s;
+        l(v()[prop]);
+    }
+
+    let v = () => c.store.getState();
+    
+    let cs = v();
+    
+    let l = (() => {
+        let pn = [];
+        let p = {
+            events: {},
+            transmit: (e) => {
+                pn.push(e);
+                jk();
+            }
+        };
+
+        function jk() {
+            for (let listener of main.listeners) {
+                if (pn.includes(listener.event)) {
+                    listener.handler(p, main);
+                }
+            }
+            pn = [];
+        }
+
+        let main = {
+            on: (e, f) => {
+                this.listeners.push({ event: e, handler: f });
+                return this.listeners[this.listeners.length - 1];
+            },
+            listeners: []
+        };
+
+        return { propagator: p, receiver: main };
+    })();
+    
+    let nvn = `events${rd}`;
+    o(nvn, l, () => {
+        window.getEvents = () => v()[nvn];
+    });
+})();
